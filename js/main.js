@@ -55,7 +55,31 @@ const addBasketBtns = document.querySelectorAll('.product__basket-btn');
 const deleteBasketBtns = document.querySelectorAll('.product__basket-btn-delete')
 
 addBasketBtns.forEach(btn => btn.addEventListener('click', addToBasket))
-deleteBasketBtns.forEach(btn => btn.addEventListener('click', deleteToBasket))
+deleteBasketBtns.forEach(btn => btn.addEventListener('click', deleteBasket))
+
+// удаление товара
+
+function deleteBasket(e) {
+    e.preventDefault()
+    const dataset = e.target.dataset
+    const data = {
+        id: dataset.id,
+        name: dataset.name,
+        price: +dataset.price
+    }
+
+    let card = JSON.parse(localStorage.getItem('cart'));
+    if (card[data.id].count > 0) {
+        card[data.id].count--
+        card[data.id].productSumm = card[data.id].count * data.price
+    } else {
+        alert('Вы не добавляли этот товар в корзину')
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart))
+
+    setTotalSumm();
+}
 
 /// добавление рекламы
 
@@ -146,26 +170,3 @@ function addToBasket(e) {
 // handleAd.handleShow();
 handleAd.closeBtn.addEventListener('click', handleAd.hideAd)
 
-// удаление товара
-
-function deleteToBasket(e) {
-    e.preventDefault()
-    const dataset = e.target.dataset
-    const data = {
-        id: dataset.id,
-        name: dataset.name,
-        price: +dataset.price
-    }
-
-    let card = JSON.parse(localStorage.getItem('cart'));
-    if (card[data.id].count > 0) {
-        card[data.id].count--
-        card[data.id].productSumm = card[data.id].count * data.price
-    } else {
-        alert('Вы не добавляли этот товар в корзину')
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart))
-
-    setTotalSumm();
-}
